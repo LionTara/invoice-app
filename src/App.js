@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+
+import UserData from './Components/Customers/CustomersData';
+import ItemsData from './Components/Items/ItemsData';
+import InvoicesData from './Components/Invoices/InvoicesData';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <main>
+        <header>
+          <div>
+            <h2>Invoicer</h2>
+          </div>
+          <div>
+            <ul>
+              <li>Print</li>
+              <li>Download</li>
+              <li>Send</li>
+            </ul>
+          </div>
+        </header>
+        <div>
+          <UserData/>
+        </div>
+        <div>
+          <ItemsData/>
+        </div>
+        <div>
+          <InvoicesData/>
+        </div>
+      </main>
+    </>
   );
 }
 
