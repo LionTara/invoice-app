@@ -1,6 +1,5 @@
 import React from 'react';
-
-import UserData from './Components/Customers/CustomersData';
+import CustomersData from './Components/Customers/CustomersData';
 import ItemsData from './Components/Items/ItemsData';
 import InvoicesData from './Components/Invoices/InvoicesData';
 
@@ -11,7 +10,7 @@ function App() {
       <main>
         <header>
           <div>
-            <h2>Invoicer</h2>
+            <h2>Invoice</h2>
           </div>
           <div>
             <ul>
@@ -22,14 +21,15 @@ function App() {
           </div>
         </header>
         <div>
-          <UserData/>
+          <CustomersData />
         </div>
         <div>
-          <ItemsData/>
+          <ItemsData />
         </div>
         <div>
-          <InvoicesData/>
+          <InvoicesData />
         </div>
+
       </main>
     </>
   );
