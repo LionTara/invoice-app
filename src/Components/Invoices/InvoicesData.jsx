@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+
+import { Form, Input, InputNumber, Popconfirm, Table } from 'antd';
+import { PlusCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+
 import fetchData from "../../APIRequests/fetchInvoicesData";
-import { Button, Form, Input, Popconfirm, Table } from 'antd';
+import Total from '../Total/Total';
 
 const EditableContext = React.createContext(null);
-
 
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -65,7 +68,11 @@ const EditableCell = ({
           },
         ]}
       >
-        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+        {dataIndex === 'quantity' ? (
+          <InputNumber ref={inputRef} min={1} onPressEnter={save} onBlur={save} />
+        ) : (
+          <Input ref={inputRef} min={1} onPressEnter={save} onBlur={save} />
+        )}
       </Form.Item>
     ) : (
       <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
@@ -84,7 +91,10 @@ const InvoicesData = () => {
   const [dataSource, setDataSource] = useState([
     {
       key: '0',
+      number: 1,
+      code: null,
       name: emptyObject,
+      quantity: 0,
       price: 0,
       vatRate: 0.2,
       totalPrice: null
@@ -102,32 +112,54 @@ const InvoicesData = () => {
 
   const defaultColumns = [
     {
+      title: '',
+      dataIndex: 'number',
+      width: '5%',
+    },
+    {
+      title: 'Code',
+      dataIndex: 'code',
+      width: '15%',
+    },
+    {
       title: 'Name',
       dataIndex: 'name',
-      width: '30%',
       editable: true,
+      width: '20%',
     },
     {
       title: 'Price',
       dataIndex: 'price',
       editable: true,
+      width: '15%',
     },
     {
-      title: 'TVSH',
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      editable: true,
+      width: '10%',
+    },
+    {
+      title: 'VAT Category',
       dataIndex: 'vatRate',
       editable: true,
     },
     {
-      title: 'Total',
+      title: 'Total with VAT',
       dataIndex: 'totalPrice',
+      width: '20%',
     },
     {
-      title: 'operation',
+      title: '',
       dataIndex: 'operation',
+      width: '5%',
+
       render: (_, record) =>
         dataSource.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-            <a>Delete</a>
+            <CloseCircleFilled
+              style={{ fontSize: '15px', color: 'grey' }}
+            />
           </Popconfirm>
         ) : null,
     },
@@ -136,7 +168,10 @@ const InvoicesData = () => {
   const handleAdd = () => {
     const newData = {
       key: count,
+      number: count,
+      code: null,
       name: `.`,
+      quantity: 0,
       price: 0,
       vatRate: 0.2,
       totalPrice: null
@@ -146,7 +181,7 @@ const InvoicesData = () => {
   };
 
   const calculateTotal = (item) => {
-    let totalPrice = (parseFloat(item.price ?? 0) * parseFloat(item.vatRate ?? 0)) + parseFloat(item.price ?? 0);
+    let totalPrice = ((parseFloat(item.price ?? 0) * parseFloat(item.vatRate ?? 0)) + parseFloat(item.price ?? 0)) * parseInt(item.quantity ?? 0);
     console.log({ item, totalPrice });
     return {
       ...item,
@@ -154,9 +189,13 @@ const InvoicesData = () => {
     };
   };
 
+  // handle save on creating new row or on cells' value change
   const handleSave = (row) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
+    const updatedItem = { ...newData[index], ...row }; 
+    newData.splice(index, 1, updatedItem);
+    
     const modifiedItem = calculateTotal(row);
     newData.splice(index, 1, modifiedItem);
     console.log({ modifiedItem, newData, row });
@@ -199,35 +238,24 @@ const InvoicesData = () => {
   return (
     <>
       <div>
-        <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-          Add a row
-        </Button>
         <Table
           components={components}
           rowClassName={() => 'editable-row'}
           bordered
           dataSource={dataSource}
           columns={columns}
-        />
-      </div>
-      {/* <div>
-        {data ? (
-          <div>
-            {console.log('Invoices data: ', data)}
-            <ul>
-              {data.map(invoice => (
-                <li key={invoice.id}>{invoice.invoiceLines.itemName} - ${invoice.price}</li>
-
-              ))}
-            </ul>
-            <div>
-              <p> {data[1].itemName}</p>
+          footer={() => (
+            <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: "none" }}>
+              <PlusCircleFilled
+                onClick={handleAdd} type="primary"
+                style={{ fontSize: '23px', color: '#1677ff' }}
+              />
             </div>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div> */}
+          )}
+        />
+        <Total items={dataSource} /> {/* Render Total component and pass dataSource as props */}
+      </div>
+
     </>
   );
 };

@@ -1,7 +1,8 @@
 import React from 'react';
 import CustomersData from './Components/Customers/CustomersData';
-import ItemsData from './Components/Items/ItemsData';
+// import ItemsData from './Components/Items/ItemsData';
 import InvoicesData from './Components/Invoices/InvoicesData';
+import Total from './Components/Total/Total';
 
 
 function App() {
@@ -12,24 +13,16 @@ function App() {
           <div>
             <h2>Invoice</h2>
           </div>
-          <div>
-            <ul>
-              <li>Print</li>
-              <li>Download</li>
-              <li>Send</li>
-            </ul>
-          </div>
         </header>
         <div>
           <CustomersData />
         </div>
         <div>
-          <ItemsData />
-        </div>
-        <div>
           <InvoicesData />
         </div>
-
+        <div>
+          <Total />
+        </div>
       </main>
     </>
   );
