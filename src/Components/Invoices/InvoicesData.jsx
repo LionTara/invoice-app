@@ -182,7 +182,7 @@ const InvoicesData = () => {
 
   const calculateTotal = (item) => {
     let totalPrice = ((parseFloat(item.price ?? 0) * parseFloat(item.vatRate ?? 0)) + parseFloat(item.price ?? 0)) * parseInt(item.quantity ?? 0);
-    console.log({ item, totalPrice });
+    totalPrice = totalPrice.toFixed(2)
     return {
       ...item,
       totalPrice
@@ -193,12 +193,11 @@ const InvoicesData = () => {
   const handleSave = (row) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
-    const updatedItem = { ...newData[index], ...row }; 
+    const updatedItem = { ...newData[index], ...row };
     newData.splice(index, 1, updatedItem);
-    
+
     const modifiedItem = calculateTotal(row);
     newData.splice(index, 1, modifiedItem);
-    console.log({ modifiedItem, newData, row });
     setDataSource(newData);
   };
 
@@ -253,8 +252,9 @@ const InvoicesData = () => {
             </div>
           )}
         />
-        <Total items={dataSource} /> {/* Render Total component and pass dataSource as props */}
       </div>
+
+      <Total items={dataSource} />
 
     </>
   );

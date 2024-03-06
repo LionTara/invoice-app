@@ -18,16 +18,20 @@ const CustomersData = () => {
   }, []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '50vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '50vh', minWidth: '60vh' }}>
       <>
-        <div style={{ border: '1px solid #ccc', borderRadius: '5px', backgroundColor: 'white' }}>
-          <div style={{ marginBottom: '20px' }}>
+        <div style={{ borderRight: '1px solid #ccc', backgroundColor: 'white' }}>
+          <div style={{ paddingLeft: '20px' }}>
             <Title level={4}>Billed to:</Title>
+          </div>
+        </div>
+        <div style={{ borderRight: '1px solid #ccc', backgroundColor: 'white' }}>
+          <div style={{ marginBottom: '20px', padding: '20px' }}>
             {data ? (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', marginBottom: '10px' }}>
-                  <p style={{ width: '100px', marginRight: '10px' }}>Name:</p>
-                  <Input style={{ flex: 1 }} placeholder="Name" />
+                  <p style={{ width: '100px', marginRight: '10px' }}>Full Name:</p>
+                  <Input style={{ flex: 1 }} placeholder="Name Surname" />
                 </div>
                 <div style={{ display: 'flex', marginBottom: '10px' }}>
                   <p style={{ width: '100px', marginRight: '10px' }}>Address:</p>

@@ -7,7 +7,7 @@ import Total from './Components/Total/Total';
 
 function App() {
   return (
-    <>
+      <>
       <main>
         <header>
           <div>
@@ -15,16 +15,22 @@ function App() {
           </div>
         </header>
         <div>
-          <CustomersData />
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between',backgroundColor:"red" }}>
+            <div style={{ display: "flex", justifyContent: "left", paddingLeft: '20px', paddingRight: '20px' }}>
+              <CustomersData />
+            </div>
+
+          </div>
+          <div style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+            <InvoicesData />
+          </div>
+          <div>
+              <Total />
+            </div>
         </div>
-        <div>
-          <InvoicesData />
-        </div>
-        <div>
-          <Total />
-        </div>
+
       </main>
-    </>
+</>
   );
 }
 
