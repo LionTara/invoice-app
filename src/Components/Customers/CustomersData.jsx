@@ -4,7 +4,7 @@ import { Typography, Input } from 'antd';
 
 const { Title } = Typography;
 
-const CustomersData = () => {
+const CustomersData = ({invoice,setInvoice}) => {
 
   const [data, setData] = useState(null);
 
@@ -18,7 +18,7 @@ const CustomersData = () => {
   }, []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '50vh', minWidth: '60vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
       <>
         <div style={{ borderRight: '1px solid #ccc', backgroundColor: 'white' }}>
           <div style={{ paddingLeft: '20px' }}>
@@ -27,7 +27,7 @@ const CustomersData = () => {
         </div>
         <div style={{ borderRight: '1px solid #ccc', backgroundColor: 'white' }}>
           <div style={{ marginBottom: '20px', padding: '20px' }}>
-            {data ? (
+            {/* {data ? ( */}
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <div style={{ display: 'flex', marginBottom: '10px' }}>
                   <p style={{ width: '100px', marginRight: '10px' }}>Full Name:</p>
@@ -42,9 +42,9 @@ const CustomersData = () => {
                   <Input style={{ flex: 1 }} placeholder="Phone No." />
                 </div>
               </div>
-            ) : (
-              <p>Loading customer information...</p>
-            )}
+            {/* ) : ( */}
+              {/* <p>Loading customer information...</p> */}
+            {/* )} */}
           </div>
         </div>
       </>

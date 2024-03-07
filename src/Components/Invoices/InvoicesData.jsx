@@ -86,28 +86,28 @@ const EditableCell = ({
 
 const emptyObject = '.'
 
-const InvoicesData = () => {
+const InvoicesData = ({invoice,setInvoice}) => {
 
-  const [dataSource, setDataSource] = useState([
-    {
-      key: '0',
-      number: 1,
-      code: null,
-      name: emptyObject,
-      quantity: 0,
-      price: 0,
-      vatRate: 0.2,
-      totalPrice: null
-    },
-  ]);
+  // const [invoice.invoiceLines, setDataSource] = useState([
+  //   {
+  //     key: '0',
+  //     number: 1,
+  //     code: null,
+  //     name: emptyObject,
+  //     quantity: 0,
+  //     price: 0,
+  //     vatRate: 0.2,
+  //     totalPrice: null
+  //   },
+  // ]);
 
   const [data, setData] = useState(null);
 
   const [count, setCount] = useState(2);
 
   const handleDelete = (key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
+    const newData = invoice.invoiceLines.filter((item) => item.key !== key);
+    setInvoice((state)=>({...state,invoiceLines:newData}));
   };
 
   const defaultColumns = [
@@ -155,7 +155,7 @@ const InvoicesData = () => {
       width: '5%',
 
       render: (_, record) =>
-        dataSource.length >= 1 ? (
+        invoice.invoiceLines.length >= 1 ? (
           <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
             <CloseCircleFilled
               style={{ fontSize: '15px', color: 'grey' }}
@@ -176,11 +176,12 @@ const InvoicesData = () => {
       vatRate: 0.2,
       totalPrice: null
     };
-    setDataSource([...dataSource, newData]);
+    setInvoice((state)=>({...state,invoiceLines:[...invoice.invoiceLines, newData]}))
+    // setDataSource([...invoice.invoiceLines, newData]);
     setCount(count + 1);
   };
 
-  const calculateTotal = (item) => {
+  const calculateItemTotals = (item) => {
     let totalPrice = ((parseFloat(item.price ?? 0) * parseFloat(item.vatRate ?? 0)) + parseFloat(item.price ?? 0)) * parseInt(item.quantity ?? 0);
     totalPrice = totalPrice.toFixed(2)
     return {
@@ -189,16 +190,40 @@ const InvoicesData = () => {
     };
   };
 
+  const calculateInvoiceTotals = (invoiceLines) => {
+    let totalVatAmount = 0;
+    let totalAmount = 0;
+
+    invoiceLines.forEach(item => {
+        const price = parseFloat(item.price || 0);
+        const quantity = parseInt(item.quantity || 0);
+        const vatRate = parseFloat(item.vatRate || 0);
+
+        const totalPrice = price * quantity;
+        const totalVATValue = totalPrice * vatRate;
+
+        totalVatAmount += totalVATValue;
+        totalAmount += totalPrice + totalVATValue;
+    });
+
+    return {
+        totalVatAmount,
+        totalAmount
+    };
+};
+
   // handle save on creating new row or on cells' value change
   const handleSave = (row) => {
-    const newData = [...dataSource];
+    const newData = [...invoice.invoiceLines];
     const index = newData.findIndex((item) => row.key === item.key);
     const updatedItem = { ...newData[index], ...row };
     newData.splice(index, 1, updatedItem);
 
-    const modifiedItem = calculateTotal(row);
+    const modifiedItem = calculateItemTotals(row);
     newData.splice(index, 1, modifiedItem);
-    setDataSource(newData);
+    let invoiceTotals=calculateInvoiceTotals(newData)
+
+    setInvoice((state)=>({...state,invoiceLines:newData,...invoiceTotals}));
   };
 
   const components = {
@@ -241,7 +266,7 @@ const InvoicesData = () => {
           components={components}
           rowClassName={() => 'editable-row'}
           bordered
-          dataSource={dataSource}
+          dataSource={invoice.invoiceLines}
           columns={columns}
           footer={() => (
             <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: "none" }}>
@@ -254,7 +279,7 @@ const InvoicesData = () => {
         />
       </div>
 
-      <Total items={dataSource} />
+      {/* <Total items={invoice.invoiceLines} /> */}
 
     </>
   );
