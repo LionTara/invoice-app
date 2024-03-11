@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { Form, Input, InputNumber, Popconfirm, Table } from 'antd';
+import { Form, Input, InputNumber, Popconfirm, Select, Table } from 'antd';
 import { PlusCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 
-import fetchData from "../../APIRequests/fetchInvoicesData";
-import Total from '../Total/Total';
+import fetchData from "../../../APIRequests/fetchInvoicesData";
+import { checkCellValue } from '../../../Helpers/utils';
 
 const EditableContext = React.createContext(null);
+const { Option } = Select;
+
 
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -61,6 +63,7 @@ const EditableCell = ({
       <Form.Item
         style={{ margin: 0 }}
         name={dataIndex}
+        initialValue={record[dataIndex] === "" ? undefined : record[dataIndex]} // Render empty string as undefined for initial value
         rules={[
           {
             required: true,
@@ -75,8 +78,12 @@ const EditableCell = ({
         )}
       </Form.Item>
     ) : (
-      <div className="editable-cell-value-wrap" style={{ paddingRight: 24 }} onClick={toggleEdit}>
-        {children}
+      <div
+        className="editable-cell-value-wrap"
+        style={{ paddingRight: 24 }}
+        onClick={toggleEdit}
+      >
+        {record[dataIndex] === "" ? <span style={{ color: "#bfbfbf" }}>Enter {title}</span> : children}
       </div>
     );
   }
@@ -84,52 +91,61 @@ const EditableCell = ({
   return <td {...restProps}>{childNode}</td>;
 };
 
-const emptyObject = '.'
+const InvoicesData = ({ invoice, setInvoice,itemDefault }) => {
 
-const InvoicesData = ({invoice,setInvoice}) => {
-
-  // const [invoice.invoiceLines, setDataSource] = useState([
-  //   {
-  //     key: '0',
-  //     number: 1,
-  //     code: null,
-  //     name: emptyObject,
-  //     quantity: 0,
-  //     price: 0,
-  //     vatRate: 0.2,
-  //     totalPrice: null
-  //   },
-  // ]);
+  const vatOptions =
+    [
+      { value: 0, label: '0%' },
+      { value: 0.06, label: '6%' },
+      { value: 0.1, label: '10%' },
+      { value: 0.2, label: '20%' },
+    ];
 
   const [data, setData] = useState(null);
 
-  const [count, setCount] = useState(2);
+  // const [count, setCount] = useState(2);
 
   const handleDelete = (key) => {
     const newData = invoice.invoiceLines.filter((item) => item.key !== key);
-    setInvoice((state)=>({...state,invoiceLines:newData}));
+    setInvoice((state) => ({ ...state, invoiceLines: newData }));
   };
+
+  const onVatRateChange=({record,option})=>{
+    console.log({record,option})
+    setInvoice((invoice=>{
+      return {
+        invoice,
+        invoiceLines:invoice.invoiceLines.map(line=>{
+          if(line.key===record.key){
+            return {...line,vatRate:option.value}
+          }
+          return {...line}
+        })
+      }
+    }))
+  }
 
   const defaultColumns = [
     {
-      title: '',
-      dataIndex: 'number',
+      title: 'No.',
+      dataIndex: 'key',
       width: '5%',
     },
     {
       title: 'Code',
-      dataIndex: 'code',
+      dataIndex: 'itemCode',
       width: '15%',
+      editable: true
     },
     {
       title: 'Name',
-      dataIndex: 'name',
+      dataIndex: 'itemName',
       editable: true,
       width: '20%',
     },
     {
       title: 'Price',
-      dataIndex: 'price',
+      dataIndex: 'unitPrice',
       editable: true,
       width: '15%',
     },
@@ -140,9 +156,30 @@ const InvoicesData = ({invoice,setInvoice}) => {
       width: '10%',
     },
     {
-      title: 'VAT Category',
+      title: 'VAT',
       dataIndex: 'vatRate',
-      editable: true,
+      // editable: true,
+
+      render: (test, record) =>{
+        console.log({record,test})
+        return invoice.invoiceLines.length >= 1 ? (
+          // <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+          //   <CloseCircleFilled
+          //     style={{ fontSize: '15px', color: 'grey' }}
+          //   />
+          // </Popconfirm>
+          <Select
+            value={invoice?.invoiceLines?.find(line=>line.key==record.key)?.vatRate}
+            options={vatOptions}
+            onChange={(_,option)=>handleSave({...record,vatRate:option.value})}
+            showSearch
+            placeholder="Select vat rate"
+            optionFilterProp="children"
+            filterOption={false}
+          />
+        ) : null
+      }
+
     },
     {
       title: 'Total with VAT',
@@ -167,22 +204,16 @@ const InvoicesData = ({invoice,setInvoice}) => {
 
   const handleAdd = () => {
     const newData = {
-      key: count,
-      number: count,
-      code: null,
-      name: `.`,
-      quantity: 0,
-      price: 0,
-      vatRate: 0.2,
-      totalPrice: null
+      ...itemDefault,
+      key: invoice.invoiceLines.length,
     };
-    setInvoice((state)=>({...state,invoiceLines:[...invoice.invoiceLines, newData]}))
+    setInvoice((state) => ({ ...state, invoiceLines: [...invoice.invoiceLines, newData] }))
     // setDataSource([...invoice.invoiceLines, newData]);
-    setCount(count + 1);
   };
 
+
   const calculateItemTotals = (item) => {
-    let totalPrice = ((parseFloat(item.price ?? 0) * parseFloat(item.vatRate ?? 0)) + parseFloat(item.price ?? 0)) * parseInt(item.quantity ?? 0);
+    let totalPrice = ((parseFloat(checkCellValue(item.unitPrice ?? 0)) * parseFloat(checkCellValue(item.vatRate ?? 0))) + parseFloat(checkCellValue(item.unitPrice ?? 0))) * parseInt(checkCellValue(item.quantity ?? 0));
     totalPrice = totalPrice.toFixed(2)
     return {
       ...item,
@@ -195,22 +226,22 @@ const InvoicesData = ({invoice,setInvoice}) => {
     let totalAmount = 0;
 
     invoiceLines.forEach(item => {
-        const price = parseFloat(item.price || 0);
-        const quantity = parseInt(item.quantity || 0);
-        const vatRate = parseFloat(item.vatRate || 0);
+      const price = parseFloat(item.unitPrice || 0);
+      const quantity = parseInt(item.quantity || 0);
+      const vatRate = parseFloat(item.vatRate || 0);
 
-        const totalPrice = price * quantity;
-        const totalVATValue = totalPrice * vatRate;
+      const totalPrice = price * quantity;
+      const totalVATValue = totalPrice * vatRate;
 
-        totalVatAmount += totalVATValue;
-        totalAmount += totalPrice + totalVATValue;
+      totalVatAmount += totalVATValue;
+      totalAmount += totalPrice + totalVATValue;
     });
 
     return {
-        totalVatAmount,
-        totalAmount
+      totalVatAmount,
+      totalAmount
     };
-};
+  };
 
   // handle save on creating new row or on cells' value change
   const handleSave = (row) => {
@@ -221,9 +252,9 @@ const InvoicesData = ({invoice,setInvoice}) => {
 
     const modifiedItem = calculateItemTotals(row);
     newData.splice(index, 1, modifiedItem);
-    let invoiceTotals=calculateInvoiceTotals(newData)
+    let invoiceTotals = calculateInvoiceTotals(newData)
 
-    setInvoice((state)=>({...state,invoiceLines:newData,...invoiceTotals}));
+    setInvoice((state) => ({ ...state, invoiceLines: newData, ...invoiceTotals }));
   };
 
   const components = {
@@ -258,7 +289,7 @@ const InvoicesData = ({invoice,setInvoice}) => {
     getData();
   }, []);
 
-
+  // console.log(invoice)
   return (
     <>
       <div>

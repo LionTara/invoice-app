@@ -1,0 +1,32 @@
+.customer{
+    padding:10px 30px;
+}
+
+.form{
+    display: flex;
+    flex-wrap: wrap;
+    /* grid-template-columns: repeat(, 1fr); */
+    gap:20px;
+    align-items: center;
+    flex-basis: 30%;
+}
+
+
+.form-control  input,.form-control .form-input {
+    height:40px;
+    width: 250px;
+}
+
+.form-control{
+    display: flex;
+    align-items: center;
+}
+
+
+.form-control p{
+    width:100px;
+}
+
+.invoice-data .form-control{
+    width:fit-content;
+}

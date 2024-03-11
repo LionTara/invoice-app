@@ -4,7 +4,7 @@ import { Table, Typography } from 'antd';
 
 const { Title } = Typography;
 
-const CustomersData = () => {
+const ItemsPage = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -53,18 +53,9 @@ const CustomersData = () => {
 
   return (
     <>
-      {/* <div style={{ padding: '20px' }}>
-        <Title level={4}>Items</Title>
-        {data ? (
-          console.log('Items data: ', data),
-
-          <Table columns={columns} dataSource={data[0].items} pagination={false} />
-        ) : (
-          <p>Loading invoice items...</p>
-        )}
-      </div> */}
+    <h1>Items</h1>
     </>
   );
 };
 
-export default CustomersData;
+export default ItemsPage;
