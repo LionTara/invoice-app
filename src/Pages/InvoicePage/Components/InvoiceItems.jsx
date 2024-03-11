@@ -103,8 +103,6 @@ const InvoicesData = ({ invoice, setInvoice,itemDefault }) => {
 
   const [data, setData] = useState(null);
 
-  // const [count, setCount] = useState(2);
-
   const handleDelete = (key) => {
     const newData = invoice.invoiceLines.filter((item) => item.key !== key);
     setInvoice((state) => ({ ...state, invoiceLines: newData }));

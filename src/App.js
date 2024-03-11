@@ -7,9 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MyInvoicesPage from './Pages/MyInvoicesPage/MyInvoicesPage';
 
 
-
 function App() {
-
   return (
     <>
       <BrowserRouter>
@@ -19,16 +17,15 @@ function App() {
             </div>
           </header>
           <NavigationBar />
-          <div className='wrapper'>
-          <Routes>
-            <Route path={routes.invoice} element={<InvoicePage />} />
-            <Route path={routes.items} element={<ItemsPage />} />
-            <Route path={routes.myInvoices} element={<MyInvoicesPage />} />
-          </Routes>
+          <div className='wrapper' style={{ backgroundColor: '#f7f7f7' }}>
+            <Routes>
+              <Route path={routes.invoice} element={<InvoicePage />} />
+              <Route path={routes.items} element={<ItemsPage />} />
+              <Route path={routes.myInvoices} element={<MyInvoicesPage />} />
+            </Routes>
           </div>
         </main>
       </BrowserRouter>
-
     </>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import './index.css';
 import { GoldOutlined, FileTextOutlined } from '@ant-design/icons';
 import { Menu } from 'antd';
 import { routes } from '../../Helpers/static';
@@ -35,7 +34,7 @@ const NavigationBar = () => {
       icon: React.createElement(GoldOutlined, null),
     },
   ];
-  
+
 
   return (
     <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />

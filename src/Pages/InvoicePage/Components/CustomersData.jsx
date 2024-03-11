@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import fetchData from "../../../APIRequests/fetchCustomerData";
 import { Typography, Input, Select, DatePicker } from 'antd';
 import { Dayjs } from "dayjs";
+import TextArea from "antd/es/input/TextArea";
 const { Title } = Typography;
 const { Option } = Select;
 
@@ -103,7 +104,7 @@ const CustomersData = ({ invoice, setInvoice }) => {
           </div>
           <div className="form-control">
             <p>Note:</p>
-            <Input style={{}} placeholder="Write a note" />
+            <TextArea rows={3} maxLength={100} placeholder="Write a note"/>
           </div>
         </div>
 
