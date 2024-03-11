@@ -51,9 +51,7 @@ const InvoicePage = () => {
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}><Button type="primary" onClick={submitInvoice}>Save</Button></div>
             <h2 className='invoice-title' >Invoice</h2>
             <div>
-                <div>
-                    <CustomersData invoice={invoice} setInvoice={setInvoice} />
-                </div>
+                <CustomersData invoice={invoice} setInvoice={setInvoice} />
             </div>
             <div className='customer'>
                 <InvoicesData invoice={invoice} setInvoice={setInvoice} itemDefault={itemDefault} />

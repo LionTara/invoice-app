@@ -307,9 +307,6 @@ const InvoicesData = ({ invoice, setInvoice,itemDefault }) => {
           )}
         />
       </div>
-
-      {/* <Total items={invoice.invoiceLines} /> */}
-
     </>
   );
 };

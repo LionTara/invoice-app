@@ -18,7 +18,7 @@ const ItemsPage = () => {
   console.log('Items data: ', data);
 
 
-  const columns = [
+  const itemsColumns = [
     {
       title: 'Code',
       dataIndex: 'code',
@@ -35,25 +35,17 @@ const ItemsPage = () => {
       key: 'description',
     },
     {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-    },
-    {
-      title: 'Price',
+      title: 'Price Per Unit',
       dataIndex: 'price',
       key: 'price',
-    },
-    {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
     },
   ];
 
   return (
     <>
-    <h1>Items</h1>
+      <div style={{ backgroundColor: '#ffffff', borderRadius: '10px' }}>
+        <Table className="customer" dataSource={data} columns={itemsColumns} />
+      </div>
     </>
   );
 };
