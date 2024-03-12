@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import fetchData from '../../APIRequests/fetchItemsData';
 import { Table, Typography } from 'antd';
 
-const { Title } = Typography;
 
 const ItemsPage = () => {
   const [data, setData] = useState(null);
@@ -15,8 +14,6 @@ const ItemsPage = () => {
 
     getData();
   }, []);
-  console.log('Items data: ', data);
-
 
   const itemsColumns = [
     {

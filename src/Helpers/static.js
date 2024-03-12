@@ -1,5 +1,5 @@
-export const routes={
-    invoice:"/",
-    items:"/items",
-    myInvoices:"/invoices"
+export const routes = {
+    invoice: "/",
+    items: "/items",
+    myInvoices: "/invoices"
 }

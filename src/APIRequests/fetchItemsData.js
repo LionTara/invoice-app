@@ -1,24 +1,23 @@
 
 const fetchData = async () => {
-    try {
-      const response = await fetch('http://sad1.ivaelektronik.com:8081/api/Items', {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        }
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch data');
+  try {
+    const response = await fetch('http://sad1.ivaelektronik.com:8081/api/Items', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
       }
-  
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return null;
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch data');
     }
-  };
-  
-  export default fetchData;
-  
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
+  }
+};
+
+export default fetchData;

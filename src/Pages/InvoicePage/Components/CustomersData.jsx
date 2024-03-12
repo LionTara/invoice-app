@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import fetchData from "../../../APIRequests/fetchCustomerData";
 import { Typography, Input, Select, DatePicker } from 'antd';
-import { Dayjs } from "dayjs";
 import TextArea from "antd/es/input/TextArea";
 const { Title } = Typography;
 const { Option } = Select;
@@ -18,9 +17,7 @@ const CustomersData = ({ invoice, setInvoice }) => {
     'Fier'
   ]);
 
-  const onDateChange = (date, dateString) => {
-    console.log({ date, dateString });
-
+  const onDateChange = (date) => {
     setInvoice((state) => ({ ...state, invoiceDate: date }))
   };
 
@@ -56,18 +53,18 @@ const CustomersData = ({ invoice, setInvoice }) => {
   return (
     <div className="customer" style={{ display: 'flex', flexDirection: 'column' }}>
       <>
-        <div style={{}}>
-          <div style={{}}>
+        <div>
+          <div>
             <Title level={4}>Billed to:</Title>
           </div>
         </div>
-        <div className="form" style={{}}>
+        <div className="form">
           <div className="form-control">
             <p>Full Name:</p>
             <Input placeholder="Name Surname" />
           </div>
           <div className="form-control">
-            <p style={{ paddingRight: '10px', width: '90px' }}>Address:</p>
+            <p>Address:</p>
             <Input placeholder="Billing address" />
           </div>
           <div className="form-control">
@@ -92,8 +89,8 @@ const CustomersData = ({ invoice, setInvoice }) => {
             <Input placeholder="Phone No." />
           </div>
         </div>
-        <div style={{}}>
-          <div style={{}}>
+        <div>
+          <div>
             <Title level={4}>Invoice Data:</Title>
           </div>
         </div>
@@ -104,7 +101,7 @@ const CustomersData = ({ invoice, setInvoice }) => {
           </div>
           <div className="form-control">
             <p>Note:</p>
-            <TextArea rows={3} maxLength={100} placeholder="Write a note"/>
+            <TextArea rows={3} maxLength={100} placeholder="Write a note" />
           </div>
         </div>
 

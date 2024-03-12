@@ -36,7 +36,6 @@ const InvoicePage = () => {
         ]
     })
 
-    console.log({ invoice })
     const submitInvoice = () => {
         const parsedInvoice = {
             ...invoice,

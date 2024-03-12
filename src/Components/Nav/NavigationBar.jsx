@@ -7,9 +7,6 @@ import { IoCreateOutline } from "react-icons/io5";
 import { LiaFileInvoiceSolid } from "react-icons/lia";
 
 
-
-
-
 const NavigationBar = () => {
   const [current, setCurrent] = useState('mail');
   const navigate = useNavigate();

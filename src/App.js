@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import NavigationBar from './Components/Nav/NavigationBar'
 import InvoicePage from './Pages/InvoicePage/InvoicePage';
 import ItemsPage from './Pages/ItemsPage/ItemsPage';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import fetchData from '../../APIRequests/fetchInvoicesData';
-import { Table, Typography } from 'antd';
+import { Table } from 'antd';
 
 const MyInvoicesPage = () => {
   const [data, setData] = useState(null);
@@ -13,8 +13,6 @@ const MyInvoicesPage = () => {
 
     getData();
   }, []);
-  console.log('Invoices data: ', data);
-
 
   const invoicesColumns = [
     {
