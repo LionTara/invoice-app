@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import fetchData from '../../APIRequests/fetchItemsData';
-import { Table, Typography } from 'antd';
+import { Table } from 'antd';
 
 
 const ItemsPage = () => {

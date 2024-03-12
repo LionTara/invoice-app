@@ -5,6 +5,8 @@ import fetchData from "../../../APIRequests/fetchInvoicesData";
 import { checkCellValue } from '../../../Helpers/utils';
 
 const EditableContext = React.createContext(null);
+const { Option } = Select;
+
 
 const EditableRow = ({ index, ...props }) => {
   const [form] = Form.useForm();
@@ -104,6 +106,21 @@ const InvoicesData = ({ invoice, setInvoice, itemDefault }) => {
     setInvoice((state) => ({ ...state, invoiceLines: newData }));
   };
 
+  const onVatRateChange=({record,option})=>{
+    console.log({record,option})
+    setInvoice((invoice=>{
+      return {
+        invoice,
+        invoiceLines:invoice.invoiceLines.map(line=>{
+          if(line.key===record.key){
+            return {...line,vatRate:option.value}
+          }
+          return {...line}
+        })
+      }
+    }))
+  }
+
   const defaultColumns = [
     {
       title: 'No.',
@@ -137,7 +154,7 @@ const InvoicesData = ({ invoice, setInvoice, itemDefault }) => {
     {
       title: 'VAT',
       dataIndex: 'vatRate',
-      render: (record) => {
+      render: (test, record) =>{
         return invoice.invoiceLines.length >= 1 ? (
           <Select
             value={invoice?.invoiceLines?.find(line => line.key == record.key)?.vatRate}
